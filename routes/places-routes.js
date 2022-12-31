@@ -48,7 +48,18 @@ router.get("/:pid", (req, res, next) => {
   res.json({ place });
 });
 
-//This route will be directed to /api/places/users/:uid as it is being filtered in the app.js
+//This route will be directed to /api/places/user/:uid as it is being filtered in the app.js
+router.get("/user/:uid", (req, res, next) => {
+  const userId = req.params.uid;
+  console.log(userId);
+
+  //Finding the user's places from the data
+  const places = DUMMY_PLACES.find((place) => {
+    return place.creator === userId;
+  });
+
+  res.json({ places });
+});
 
 //exporting a module in node js
 module.exports = router;
