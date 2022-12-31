@@ -45,11 +45,20 @@ router.get("/:pid", (req, res, next) => {
     return place.id === placeId;
   });
 
-  //Error handling as a guard clause
+  //   //Error handling as a guard clause
+  //   if (!place) {
+  //     return res
+  //       .status(404)
+  //       .json({ message: "Could not find plce for the provided ID" });
+  //   }
+
+  //Error handling for synchronous code
   if (!place) {
-    return res
-      .status(404)
-      .json({ message: "Could not find plce for the provided ID" });
+    const error = new Error("Could not find a place for the provided id");
+    error.code = 404;
+
+    //This will triger the error handling middleware in the app.js
+    throw error;
   }
 
   res.json({ place });
@@ -65,11 +74,20 @@ router.get("/user/:uid", (req, res, next) => {
     return place.creator === userId;
   });
 
-  //Error handling as a guard clause
+  //   //Error handling as a guard clause
+  //   if (!places) {
+  //     return res
+  //       .status(404)
+  //       .json({ message: "Could not find plce for the provided user ID" });
+  //   }
+
+  //Error handling for synchronous code
   if (!places) {
-    return res
-      .status(404)
-      .json({ message: "Could not find plce for the provided user ID" });
+    const error = new Error("Could not find a place for the provided id");
+    error.code = 404;
+
+    //This will forward the error to the next handling middleware in line
+    next(error);
   }
 
   res.json({ places });
