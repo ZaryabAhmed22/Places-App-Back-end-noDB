@@ -1,6 +1,9 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 
+//Own imports
+const HttpError = require("../models/http-error");
+
 //The express. Router() function is used to create a new router object. This function is used when you want to create a new router object in your program to handle requests
 const router = express.Router();
 
@@ -52,10 +55,12 @@ router.get("/:pid", (req, res, next) => {
   //       .json({ message: "Could not find plce for the provided ID" });
   //   }
 
-  //Error handling for synchronous code
+  //Error handling for synchronous code using our own Error Model
   if (!place) {
-    const error = new Error("Could not find a place for the provided id");
-    error.code = 404;
+    const error = new HttpError(
+      "Could not find a place for the provided id",
+      404
+    );
 
     //This will triger the error handling middleware in the app.js
     throw error;
@@ -81,13 +86,15 @@ router.get("/user/:uid", (req, res, next) => {
   //       .json({ message: "Could not find plce for the provided user ID" });
   //   }
 
-  //Error handling for synchronous code
+  //Error handling for synchronous code using our own Error Model
   if (!places) {
-    const error = new Error("Could not find a place for the provided id");
-    error.code = 404;
+    const error = new HttpError(
+      "Could not find a place for the provided id",
+      404
+    );
 
     //This will forward the error to the next handling middleware in line
-    next(error);
+    return next(error);
   }
 
   res.json({ places });
