@@ -45,6 +45,13 @@ router.get("/:pid", (req, res, next) => {
     return place.id === placeId;
   });
 
+  //Error handling as a guard clause
+  if (!place) {
+    return res
+      .status(404)
+      .json({ message: "Could not find plce for the provided ID" });
+  }
+
   res.json({ place });
 });
 
@@ -57,6 +64,13 @@ router.get("/user/:uid", (req, res, next) => {
   const places = DUMMY_PLACES.find((place) => {
     return place.creator === userId;
   });
+
+  //Error handling as a guard clause
+  if (!places) {
+    return res
+      .status(404)
+      .json({ message: "Could not find plce for the provided user ID" });
+  }
 
   res.json({ places });
 });
