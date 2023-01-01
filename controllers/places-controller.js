@@ -1,3 +1,5 @@
+const uuid = require("uuid");
+
 //Own imports
 const HttpError = require("../models/http-error");
 
@@ -92,6 +94,28 @@ const getPlacesByUserId = (req, res, next) => {
   res.json({ places });
 };
 
+//Middleware function for post request at "/api/places"
+const createPlace = (req, res, next) => {
+  const { title, description, coordinates, address, creator } = req.body;
+
+  //Creating a place
+  const createdPlace = {
+    id: uuid.v4(),
+    title,
+    description,
+    location: coordinates,
+    address,
+    creator,
+  };
+
+  //adding the place to the data
+  DUMMY_PLACES.push(createdPlace);
+
+  //returning a response
+  res.status(201).json({ place: createdPlace });
+};
+
 //Rxporting are functions >> this is the syntax used to export multiple functions
 exports.getPlaceById = getPlaceById;
 exports.getPlacesByUserId = getPlacesByUserId;
+exports.createPlace = createPlace;

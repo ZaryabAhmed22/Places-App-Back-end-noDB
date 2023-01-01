@@ -13,5 +13,8 @@ router.get("/:pid", placesControllers.getPlaceById);
 //This route will be directed to /api/places/user/:uid as it is being filtered in the app.js
 router.get("/user/:uid", placesControllers.getPlacesByUserId);
 
+//This route will be directed to /api/places as it is being filtered in the app.js
+router.post("/", placesControllers.createPlace);
+
 //exporting a module in node js
 module.exports = router;

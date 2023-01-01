@@ -6,7 +6,8 @@ const placesRoutes = require("./routes/places-routes");
 
 const app = express();
 
-//app.use("bo");
+//parsing the body. this should be done before the requests reaches the route
+app.use(bodyParser.json());
 
 //Registering placesRoutes as a middleware with a filter /api/places so that all the routes with this specific middleware should start with /api/places...
 app.use("/api/places", placesRoutes);
