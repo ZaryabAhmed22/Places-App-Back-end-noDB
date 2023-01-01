@@ -115,7 +115,43 @@ const createPlace = (req, res, next) => {
   res.status(201).json({ place: createdPlace });
 };
 
+//>> Middleware function for patch request at "/api/places/:pid"
+const updatePlace = (req, res, next) => {
+  //getting the place ID from the request
+  const placeId = req.params.pid;
+
+  //Finding  the place according to placeId and creating its copy, because we are avoiding to manuplulate the data directly so we create a copy and then we will update and replace it in the data
+  const placeToBeUpdated = {
+    ...DUMMY_PLACES.find((place) => {
+      return place.id === placeId;
+    }),
+  };
+
+  //Getting the index of the plcesToBeUpdated so that we can replace the updated place with it
+  const placeTBUIndex = DUMMY_PLACES.findIndex((place) => {
+    return place.id === placeId;
+  });
+
+  //Getting the user entered data
+  const { title, description } = req.body;
+
+  //Updating the place object based on user entered data
+  placeToBeUpdated.title = title;
+  placeToBeUpdated.description = description;
+
+  //Replcaing the place
+  DUMMY_PLACES[placeTBUIndex] = placeToBeUpdated;
+
+  //returning a response
+  res.status(200).json({ place: placeToBeUpdated });
+};
+
+//>> Middleware function for patch request at "/api/places/:pid"
+const deletePlace = (req, res, next) => {};
+
 //Rxporting are functions >> this is the syntax used to export multiple functions
 exports.getPlaceById = getPlaceById;
 exports.getPlacesByUserId = getPlacesByUserId;
 exports.createPlace = createPlace;
+exports.updatePlace = updatePlace;
+exports.deletePlace = deletePlace;
