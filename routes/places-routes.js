@@ -20,7 +20,7 @@ router.post("/", placesControllers.createPlace);
 router.patch("/:pid", placesControllers.updatePlace);
 
 //This route will be directed to /api/places/:pid as it is being filtered in the app.js but with a delete request
-router.patch("/:pid", placesControllers.deletePlace);
+router.delete("/:pid", placesControllers.deletePlace);
 
 //exporting a module in node js
 module.exports = router;

@@ -4,7 +4,7 @@ const uuid = require("uuid");
 const HttpError = require("../models/http-error");
 
 //Setting up dummy data
-const DUMMY_PLACES = [
+let DUMMY_PLACES = [
   {
     id: "p1",
     title: "Empire State Building",
@@ -147,7 +147,18 @@ const updatePlace = (req, res, next) => {
 };
 
 //>> Middleware function for patch request at "/api/places/:pid"
-const deletePlace = (req, res, next) => {};
+const deletePlace = (req, res, next) => {
+  //getting the place ID from the request
+  const placeId = req.params.pid;
+
+  //Filtering the data based on the place id >> overwriting the places data with the filtered places
+  DUMMY_PLACES = DUMMY_PLACES.filter((place) => {
+    return place.id !== placeId;
+  });
+
+  //returning a response
+  res.status(200).json({ message: "Deleted place" });
+};
 
 //Rxporting are functions >> this is the syntax used to export multiple functions
 exports.getPlaceById = getPlaceById;
