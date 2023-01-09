@@ -69,7 +69,7 @@ const getPlacesByUserId = (req, res, next) => {
   console.log(userId);
 
   //Finding the user's places from the data
-  const places = DUMMY_PLACES.find((place) => {
+  const places = DUMMY_PLACES.filter((place) => {
     return place.creator === userId;
   });
 
@@ -81,7 +81,7 @@ const getPlacesByUserId = (req, res, next) => {
   //   }
 
   //Error handling for synchronous code using our own Error Model
-  if (!places) {
+  if (!places || places.length === 0) {
     const error = new HttpError(
       "Could not find a place for the provided id",
       404
