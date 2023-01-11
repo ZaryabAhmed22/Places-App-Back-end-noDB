@@ -1,4 +1,5 @@
 const uuid = require("uuid");
+const { validationResult } = require("express-validator");
 
 //Own imports
 const HttpError = require("../models/http-error");
@@ -96,6 +97,12 @@ const getPlacesByUserId = (req, res, next) => {
 
 //Middleware function for post request at "/api/places"
 const createPlace = (req, res, next) => {
+  //This will check if any error returned by the validators used in the reuqest in post-routes file
+  const errors = validationResult(req);
+  //Throwing an error if the input is empty
+  if (!errors.isEmpty()) {
+    throw new HttpError("Invalid inputs passed, please check yout data", 422);
+  }
   const { title, description, coordinates, address, creator } = req.body;
 
   //Creating a place
@@ -160,7 +167,7 @@ const deletePlace = (req, res, next) => {
   res.status(200).json({ message: "Deleted place" });
 };
 
-//Rxporting are functions >> this is the syntax used to export multiple functions
+//Exporting are functions >> this is the syntax used to export multiple functions
 exports.getPlaceById = getPlaceById;
 exports.getPlacesByUserId = getPlacesByUserId;
 exports.createPlace = createPlace;
