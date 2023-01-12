@@ -3,6 +3,7 @@ const { validationResult } = require("express-validator");
 
 //Own imports
 const HttpError = require("../models/http-error");
+const getCoordsForAddress = require("../util/location");
 
 //Setting up dummy data
 let DUMMY_PLACES = [
@@ -96,22 +97,32 @@ const getPlacesByUserId = (req, res, next) => {
 };
 
 //Middleware function for post request at "/api/places"
-const createPlace = (req, res, next) => {
+const createPlace = async (req, res, next) => {
   //This will check if any error returned by the validators used in the reuqest in post-routes file
   const errors = validationResult(req);
 
-  //Throwing an error if the input is empty
+  //Throwing an error if the input is empty, replced throw with next because throw doesn't work best with async code
   if (!errors.isEmpty()) {
-    throw new HttpError("Invalid inputs passed, please check yout data", 422);
+    next(new HttpError("Invalid inputs passed, please check yout data", 422));
   }
-  const { title, description, coordinates, address, creator } = req.body;
+
+  const { title, description, address, creator } = req.body;
+
+  //Getting are coords
+  let coords;
+
+  try {
+    coords = await getCoordsForAddress(address);
+  } catch (err) {
+    return next(err);
+  }
 
   //Creating a place
   const createdPlace = {
     id: uuid.v4(),
     title,
     description,
-    location: coordinates,
+    location: coords,
     address,
     creator,
   };
