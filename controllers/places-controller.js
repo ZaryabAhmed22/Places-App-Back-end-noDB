@@ -167,6 +167,15 @@ const deletePlace = (req, res, next) => {
   //getting the place ID from the request
   const placeId = req.params.pid;
 
+  //Checking whether the place exists ors not
+  placeToBeDeleted = DUMMY_PLACES.find((place) => {
+    place.id === placeId;
+  });
+
+  if (!placeToBeDeleted) {
+    throw new HttpError("Could not find a place for this id", 404);
+  }
+
   //Filtering the data based on the place id >> overwriting the places data with the filtered places
   DUMMY_PLACES = DUMMY_PLACES.filter((place) => {
     return place.id !== placeId;
