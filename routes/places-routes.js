@@ -26,7 +26,11 @@ router.post(
 );
 
 //This route will be directed to /api/places/:pid as it is being filtered in the app.js but with a patch request
-router.patch("/:pid", placesControllers.updatePlace);
+router.patch(
+  "/:pid",
+  [check("title").not().isEmpty(), check("description").isLength({ min: 5 })],
+  placesControllers.updatePlace
+);
 
 //This route will be directed to /api/places/:pid as it is being filtered in the app.js but with a delete request
 router.delete("/:pid", placesControllers.deletePlace);

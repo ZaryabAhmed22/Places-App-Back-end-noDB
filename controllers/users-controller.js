@@ -1,4 +1,5 @@
 const uuid = require("uuid");
+const { validationResult } = require("express-validator");
 
 //Own imports
 const HttpError = require("../models/http-error");
@@ -19,13 +20,21 @@ const DUMMY_USERS = [
   },
 ];
 
-//Creating this middleware function for /api/users/:uid
+// >> Creating this middleware function for /api/users/:uid
 const getUserById = (req, res, next) => {
   res.json({ DUMMY_USERS });
 };
 
-//Creating this middleware function for /api/users/signup
+// >> Creating this middleware function for /api/users/signup
 const createUser = (req, res, next) => {
+  //This will check if any error returned by the validators used in the reuqest in post-routes file
+  const errors = validationResult(req);
+
+  //Throwing an error if the input is empty
+  if (!errors.isEmpty()) {
+    throw new HttpError("Invalid inputs passed, please check yout data", 422);
+  }
+
   //This is the data sent by signup form
   const { name, email, password } = req.body;
 
@@ -53,6 +62,7 @@ const createUser = (req, res, next) => {
   res.status(201).json({ user: createdUser });
 };
 
+// >> Creating this middleware to login user
 const loginUser = (req, res, next) => {
   //This is the data sent by signup form
   const { name, email, password } = req.body;

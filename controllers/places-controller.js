@@ -99,6 +99,7 @@ const getPlacesByUserId = (req, res, next) => {
 const createPlace = (req, res, next) => {
   //This will check if any error returned by the validators used in the reuqest in post-routes file
   const errors = validationResult(req);
+
   //Throwing an error if the input is empty
   if (!errors.isEmpty()) {
     throw new HttpError("Invalid inputs passed, please check yout data", 422);
@@ -124,6 +125,14 @@ const createPlace = (req, res, next) => {
 
 //>> Middleware function for patch request at "/api/places/:pid"
 const updatePlace = (req, res, next) => {
+  //This will check if any error returned by the validators used in the reuqest in post-routes file
+  const errors = validationResult(req);
+
+  //Throwing an error if the input is empty
+  if (!errors.isEmpty()) {
+    throw new HttpError("Invalid inputs passed, please check yout data", 422);
+  }
+
   //getting the place ID from the request
   const placeId = req.params.pid;
 
